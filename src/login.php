@@ -1,3 +1,52 @@
+<?php
+session_start();
+require "../db/dbinit.php";
+
+$error = ""; // Initialize error message
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+
+    if (empty($email) || empty($password)) {
+        $error = "Please enter both email and password!";
+    } else {
+        // Check user in the database
+        $stmt = $conn->prepare("SELECT id, role, password FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows === 1) {
+            $stmt->bind_result($user_id, $role, $hashed_password);
+            $stmt->fetch();
+
+            // Verify the password
+            if (password_verify($password, $hashed_password)) {
+                // Set session variables
+                $_SESSION['user_id'] = $user_id;
+                $_SESSION['role'] = $role;
+
+                // Redirect based on role
+                if ($role === 'admin') {
+                    header('Location: ../admin/adminHome.php');
+                } else {
+                    header('Location: products.html');
+                }
+                exit;
+            } else {
+                $error = "Invalid email or password!";
+            }
+        } else {
+            $error = "No account found with this email!";
+        }
+
+        $stmt->close();
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +74,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="./signUp.html">signUp</a>
+                        <a class="nav-link active" href="./signUp.php">signUp</a>
                     </li>
                 </ul>
             </div>
@@ -61,7 +110,7 @@
                 </form>
 
                 <div class="text-center mt-3">
-                    <span>Don't have an account? <a href="signUp.html">Sign up here</a></span>
+                    <span>Don't have an account? <a href="signUp.php">Sign up here</a></span>
                 </div>
             </div>
         </div>
