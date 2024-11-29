@@ -28,6 +28,7 @@
                     <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
                     <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
                     <li class="nav-item"><a class="nav-link" href="orderHistory.html">Order History</a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout.html">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -82,7 +83,7 @@
         <div class="cta-section">
             <h2 class="mb-3">Sign Up and Get Exclusive Discounts!</h2>
             <p>Join our community and stay updated on the latest offers and products.</p>
-            <a href="signUp.html" class="btn btn-light btn-lg">Sign Up Now</a>
+            <a href="signUp.php" class="btn btn-light btn-lg">Sign Up Now</a>
         </div>
     </div>
 
